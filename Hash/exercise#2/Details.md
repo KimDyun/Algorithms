@@ -3,11 +3,13 @@
 ## Description:
         I'd like to check if there is one of the phone numbers in the phone book which is a prefix of another number.
         If the phone numbers are as follows, the rescue team's phone number is prefix of Young-seok's phone number.
-        '''
+        
+        ```
         * rescue team : 119
         * Jun-young : 97 674 223
         * Young-seok : 11 9552 4421
-        '''
+        ```
+        
         When 'phone_book' which is an array(list) containing phone numbers is given
         as a parameter of the solution method, write the solution method to return false if there is a phone number
         which is a prefix of another number, or return true if not.
