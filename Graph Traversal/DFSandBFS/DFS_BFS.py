@@ -1,5 +1,6 @@
 import sys
 
+
 def graph_loader(input):
     graph = dict()
 
@@ -16,6 +17,7 @@ def graph_loader(input):
 
     return graph
 
+
 def DFS(graph, start):
     visited = list()
     stack = list()
@@ -29,6 +31,7 @@ def DFS(graph, start):
                 stack.extend(sorted(graph[node], reverse=True))
     return visited
 
+
 def BFS(graph, start):
     visited = list()
     queue = list()
@@ -41,6 +44,7 @@ def BFS(graph, start):
             if node in graph:
                 queue.extend(sorted(graph[node], reverse=False))
     return visited
+
 
 if __name__ == '__main__':
     N, M, start = map(int, sys.stdin.readline().split())
