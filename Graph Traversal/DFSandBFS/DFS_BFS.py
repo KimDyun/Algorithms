@@ -50,6 +50,5 @@ if __name__ == '__main__':
     dfs = DFS(graph, start)
     bfs = BFS(graph, start)
 
-
     print(' '.join(map(str, dfs)))
     print(' '.join(map(str, bfs)))
