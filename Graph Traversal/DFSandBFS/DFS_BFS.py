@@ -47,8 +47,8 @@ if __name__ == '__main__':
     input = [list(map(int, sys.stdin.readline().split())) for _ in range(M)]
 
     graph = graph_loader(input)
-    dfs = DFS(graph,start)
-    bfs = BFS(graph,start)
+    dfs = DFS(graph, start)
+    bfs = BFS(graph, start)
 
     print(' '.join(map(str, dfs)))
     print(' '.join(map(str, bfs)))
