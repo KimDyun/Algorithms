@@ -46,7 +46,7 @@ def building_walls(wall_num):
 
 if __name__ == '__main__':
     N, M = map(int, sys.stdin.readline().split())
-    graph = [list(map(int, sys.stdin.readline().split())) for _ in range(M)]
+    graph = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
 
     moveX = [-1, 1, 0, 0]
     moveY = [0, 0, -1, 1]
