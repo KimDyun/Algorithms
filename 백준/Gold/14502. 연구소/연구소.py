@@ -1,7 +1,6 @@
 import sys
 from collections import deque
 from itertools import combinations
-import copy
 
 
 def bfs():
@@ -48,9 +47,9 @@ def bfs():
                     new_graph[m] = 2 # infection
                     queue.append(m) # store a infected area
 
-        ans = max(ans, init_area - infection_cnt)
-
-    return ans
+        global answer
+        
+        answer = max(answer, init_area - infection_cnt)
 
 
 if __name__ == '__main__':
@@ -60,5 +59,6 @@ if __name__ == '__main__':
     for i in range(0, size, M):
         graph[i: i + M] = [*map(int, sys.stdin.readline().split())]
 
-    answer = bfs()
+    answer = 0
+    bfs()
     print(answer)
