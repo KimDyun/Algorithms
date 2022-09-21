@@ -1,12 +1,11 @@
 import sys
 from collections import deque
 from itertools import combinations
-import copy
 
 
 def bfs():
-    safety = []
-    infection = []
+    safety = []  # safe area
+    infection = []  # infected area
 
     # Initial state of a laboratory where the virus has been leaked.
     for i in range(size):
@@ -15,39 +14,42 @@ def bfs():
         if graph[i] == 2:
             infection.append(i)
 
-    init_area = len(safety) + len(infection) - 3
+    init_area = len(safety) + len(infection) - 3  # wall-less area
     ans = 0
 
-    num_cases_make_wall = combinations(safety, 3)
+    num_cases_make_wall = combinations(safety, 3)  # the number of cases that you can make wall
 
-    for nc in num_cases_make_wall:
+    for case in num_cases_make_wall:
         new_graph = graph.copy()
-        queue = safety.copy()
+        queue = infection.copy()
+
         infection_cnt = 0
 
-        for n in nc:
-            new_graph[n] = 1
+        for c in case:
+            new_graph[c] = 1  # build a wall
 
         # The state of the laboratory where the virus is being spread.
         while queue:
-            idx = queue.pop()
+            idx = queue.pop()  # infected area
             infection_cnt += 1
-            cor_x, cor_y = idx // M, idx % M
+            cor_x, cor_y = idx // M, idx % M  # column index and row index on a 2-dim grid.
 
-            move =[
+            move = [
                 idx - M if 0 < cor_x else -1,
                 idx + M if cor_x < N - 1 else -1,
                 idx - 1 if 0 < cor_y else -1,
                 idx + 1 if cor_y < M - 1 else -1
-            ]
+            ]  # get indices of graph (1-dim list) after checking if the index is exceeded
+                # when moving up, down, left, and right on a 2-dim grid.
+
             for m in move:
-                if m != -1 and new_graph[m] == 0:
-                    new_graph[m] = 2
-                    queue.append(m)
+                if m != -1 and new_graph[m] == 0: # if virus can be spread
+                    new_graph[m] = 2 # infection
+                    queue.append(m) # store a infected area
 
-        ans = max(ans, init_area - infection_cnt)
+        global answer
 
-    return ans
+        answer = max(answer, init_area - infection_cnt)
 
 
 if __name__ == '__main__':
@@ -55,10 +57,8 @@ if __name__ == '__main__':
     size = N * M
     graph = [0] * size
     for i in range(0, size, M):
-        graph[i : i+M] = [*map(int, sys.stdin.readline().split())]
+        graph[i: i + M] = [*map(int, sys.stdin.readline().split())]
 
-    moveX = [-1, 1, 0, 0]
-    moveY = [0, 0, -1, 1]
-
-    answer = bfs()
+    answer = 0
+    bfs()
     print(answer)
