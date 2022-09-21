@@ -2,7 +2,6 @@ import sys
 from collections import deque
 from itertools import combinations
 
-
 def bfs():
     safety = []  # safe area
     infection = []  # infected area
@@ -48,7 +47,6 @@ def bfs():
                     queue.append(m) # store a infected area
 
         global answer
-
         answer = max(answer, init_area - infection_cnt)
 
 
