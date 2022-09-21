@@ -1,56 +1,64 @@
 import sys
 from collections import deque
+from itertools import combinations
 import copy
 
 
 def bfs():
-    tmp_graph = copy.deepcopy(graph)
-    queue = deque()
+    safety = []
+    infection = []
 
     # Initial state of a laboratory where the virus has been leaked.
-    for i in range(N):
-        for j in range(M):
-            if tmp_graph[i][j] == 2:
-                queue.append((i, j))
+    for i in range(size):
+        if graph[i] == 0:
+            safety.append(i)
+        if graph[i] == 2:
+            infection.append(i)
 
-    # The state of the laboratory where the virus is being spread.
-    while queue:
-        cor_x, cor_y = queue.popleft()
-        for k in range(4):
-            new_x = cor_x + moveX[k]
-            new_y = cor_y + moveY[k]
+    init_area = len(safety) + len(infection) - 3
+    ans = 0
 
-            if 0 <= new_x < N and 0 <= new_y < M and tmp_graph[new_x][new_y] == 0:
-                tmp_graph[new_x][new_y] = 2
-                queue.append((new_x, new_y))
+    num_cases_make_wall = combinations(safety, 3)
 
-    safe_area = 0
-    global answer
+    for nc in num_cases_make_wall:
+        new_graph = graph.copy()
+        queue = safety.copy()
+        infection_cnt = 0
 
-    for n in range(N):
-        safe_area += tmp_graph[n].count(0)
-    answer = max(answer, safe_area)
+        for n in nc:
+            new_graph[n] = 1
 
-def building_walls(wall_num):
-    if wall_num == 3:
-        bfs()
-        return
+        # The state of the laboratory where the virus is being spread.
+        while queue:
+            idx = queue.pop()
+            infection_cnt += 1
+            cor_x, cor_y = idx // M, idx % M
 
-    for i in range(N):
-        for j in range(M):
-            if graph[i][j] == 0:
-                graph[i][j] = 1
-                building_walls(wall_num+1)
-                graph[i][j] = 0
+            move =[
+                idx - M if 0 < cor_x else -1,
+                idx + M if cor_x < N - 1 else -1,
+                idx - 1 if 0 < cor_y else -1,
+                idx + 1 if cor_y < M - 1 else -1
+            ]
+            for m in move:
+                if m != -1 and new_graph[m] == 0:
+                    new_graph[m] = 2
+                    queue.append(m)
+
+        ans = max(ans, init_area - infection_cnt)
+
+    return ans
 
 
 if __name__ == '__main__':
     N, M = map(int, sys.stdin.readline().split())
-    graph = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
+    size = N * M
+    graph = [0] * size
+    for i in range(0, size, M):
+        graph[i : i+M] = [*map(int, sys.stdin.readline().split())]
 
     moveX = [-1, 1, 0, 0]
     moveY = [0, 0, -1, 1]
 
-    answer = 0
-    building_walls(0)
+    answer = bfs()
     print(answer)
