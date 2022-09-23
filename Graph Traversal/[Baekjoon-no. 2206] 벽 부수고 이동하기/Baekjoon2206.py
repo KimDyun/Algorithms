@@ -26,9 +26,9 @@ def bfs():
                     queue.append((m, 1))
                     graph[m] = graph[i] + 1
 
-    if graph[size-1] == 0:
+    if graph[-1] == 0:
         return -1
-    return graph[size-1]
+    return graph[-1]
 
 if __name__ == '__main__':
     N, M = map(int, sys.stdin.readline().split())
