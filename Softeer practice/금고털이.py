@@ -1,29 +1,29 @@
 import sys
 from collections import deque
 
+"""
+    O(nlogn)의 sorting을 수행하면 N의 범위가 크기 때문에 시간초과가 남
+    O(n+p) --> O(n)의 counting sort를 사용해야 함
+"""
 if __name__ == "__main__":
     W, N = map(int, sys.stdin.readline().split())
-    jews = [tuple(map(int,sys.stdin.readline().split())) for _ in range(N)]
+    PMmatrix = list()
+    for i in range(1,(10**4)+1):
+        PMmatrix.append([i, 0])
+    for _ in range(N):
+        m, p = map(int, sys.stdin.readline().split())
+        PMmatrix[p-1][1] += m
 
-    kf = (lambda x: x[0]*x[1])
-    jews.sort(key = kf, reverse = True)
-
-    jews = deque(jews)
     answer = 0
-    total_W, total_P = 0, 0
-
-    m, p = jews.popleft()
-    if m < W:
-        total_W = m
-        total_P = m*p
-
-    while jews:
-        m, p = jews.popleft()
-        if total_W + m > W:
+    sum_w = 0
+    for i in range(10**4 - 1, -1, -1):
+        weight = PMmatrix[i][1]
+        if weight == 0 : continue
+        if sum_w + weight >= W:
+            res_w = W - sum_w
+            answer += res_w * PMmatrix[i][0]
             break
-        total_W += m
-        total_P += m*p
-    res = W - total_W
-    total_P += res*p
+        sum_w += weight
+        answer += weight * PMmatrix[i][0]
 
-    print(total_P)
+    print(answer)
